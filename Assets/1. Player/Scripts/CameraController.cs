@@ -24,29 +24,29 @@ using UnityEngine.InputSystem;
         [Header("Dependencies")]
         public PlayerController playerController;
 
-        public CameraDirection CameraDirection { get { return _cameraDirection; } }
-        public CameraDirection _cameraDirection = CameraDirection.Forward;
+        //public CameraDirection CameraDirection { get { return _cameraDirection; } }
+        //public CameraDirection _cameraDirection = CameraDirection.Forward;
 
-        private void Awake()
-        {
-            PlayerInputController.input_OnSpinCameraDelegate += OnTurnCamera;
-        }
+        //private void Awake()
+        //{
+        //    //PlayerInputController.input_OnSpinCameraDelegate += OnTurnCamera;
+        //}
 
         private void FixedUpdate()
         {
             OffsetCamera();
-            RotateCamera();
+            //RotateCamera();
         }
 
-        private void OnTurnCamera(int direction)
-        {
-            int newDirectionVal = (int)_cameraDirection + direction;
-            if (newDirectionVal < 0)
-                newDirectionVal += 4;
-            else if (newDirectionVal > 3)
-                newDirectionVal -= 4;
-            _cameraDirection = (CameraDirection)newDirectionVal; //change the camera direction
-        }
+        //private void OnTurnCamera(int direction)
+        //{
+        //    int newDirectionVal = (int)_cameraDirection + direction;
+        //    if (newDirectionVal < 0)
+        //        newDirectionVal += 4;
+        //    else if (newDirectionVal > 3)
+        //        newDirectionVal -= 4;
+        //    _cameraDirection = (CameraDirection)newDirectionVal; //change the camera direction
+        //}
 
         private void OffsetCamera()
         {
@@ -60,8 +60,8 @@ using UnityEngine.InputSystem;
             }
         }
 
-        private void RotateCamera() //rotates the cameraTarget by 'angle' degrees
-        {
-            cameraRotationAxis.rotation = Quaternion.Lerp(cameraRotationAxis.rotation, Quaternion.Euler(0, (int)_cameraDirection * 90f, 0), cameraRotationSmoothTime);
-        }
+        //private void RotateCamera() //rotates the cameraTarget by 'angle' degrees
+        //{
+        //    cameraRotationAxis.rotation = Quaternion.Lerp(cameraRotationAxis.rotation, Quaternion.Euler(0, (int)_cameraDirection * 90f, 0), cameraRotationSmoothTime);
+        //}
     }

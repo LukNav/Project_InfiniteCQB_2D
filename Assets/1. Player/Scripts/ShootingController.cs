@@ -56,6 +56,10 @@ public class ShootingController : MonoBehaviour
 
     public void Fire()
     {
+        if(!_isWeaponDrawn)
+        {
+            Debug.LogWarning("Weapon is not drawn!!!! CLICK V");
+        }
         if(shootTimer > fireRate && _isWeaponDrawn)
         {
             shootTimer = 0f;
@@ -68,11 +72,11 @@ public class ShootingController : MonoBehaviour
                     _bulletPool[i].transform.rotation = firePoint.rotation;
                     _bulletPool[i].SetActive(true);
 
-                    if (!isSprinting)
-                    {
-                        ShootTowardMouse(i);
-                        break;
-                    }
+                    //if (!isSprinting)
+                    //{
+                    //    ShootTowardMouse(i);
+                    //    break;
+                    //}
 
                     _bulletPool[i].GetComponent<Rigidbody2D>().velocity = firePoint.up * bulletSpeed;
                     break;
