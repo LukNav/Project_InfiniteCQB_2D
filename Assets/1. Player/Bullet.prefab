@@ -370,6 +370,7 @@ MonoBehaviour:
   trailRenderer: {fileID: 2202568186308289772}
   damage: 15
   selfDestroyTime: 2
+  selfDestroyDistance: 0.3
 --- !u!50 &4838260872289233696
 Rigidbody2D:
   serializedVersion: 4
