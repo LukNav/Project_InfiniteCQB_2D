@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 741e617c4f8b679438941ec2c71418a3
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - fovPrefab: {fileID: 4094619369400969413, guid: 65c2fcf9272dcd44fb448043399c9a4c, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -10,13 +10,13 @@ public class StatsController : MonoBehaviour
     public float health = 100;
     public float initialHealth { get; private set; }
 
-    public Animator animator;// move this to other script, e.g. rigid body controller and subscribe to Die event
-    public Collider collider;
-    public GameObject weaponCollider; // This is not pretty, but works for demo - Has a task to fix in "Mid-Late Phase" epic
-    public Rigidbody rigidBody;
-    public Rigidbody rigsRigidBody;
-    public GameObject hips;
-    public MonoBehaviour controller;
+    ////public Animator animator;// move this to other script, e.g. rigid body controller and subscribe to Die event
+    //public Collider2D collider;
+    //public GameObject weaponCollider; // This is not pretty, but works for demo - Has a task to fix in "Mid-Late Phase" epic
+    //public Rigidbody rigidBody;
+    //public Rigidbody rigsRigidBody;
+    //public GameObject hips;
+    //public MonoBehaviour controller;
 
     public delegate void DeathDelegate();
     public DeathDelegate deathDelegate;
@@ -53,17 +53,17 @@ public class StatsController : MonoBehaviour
 
     private void Die()
     {
-        animator.enabled = false;
-        collider.enabled = false;
-        rigidBody.isKinematic = true;
+        ////animator.enabled = false;
+        //collider.enabled = false;
+        //rigidBody.isKinematic = true;
         
-        hips.SetActive(true);
-        //rigsRigidBody.constraints = RigidbodyConstraints.None;
-        controller.enabled = false;
+        //hips.SetActive(true);
+        ////rigsRigidBody.constraints = RigidbodyConstraints.None;
+        //controller.enabled = false;
         //weaponCollider.SetActive(true);
 
         
-        //Destroy(gameObject);
+        Destroy(gameObject);
     }
 
     public void ResetHitInfo()
