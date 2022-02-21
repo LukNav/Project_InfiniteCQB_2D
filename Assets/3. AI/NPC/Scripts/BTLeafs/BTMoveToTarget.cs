@@ -4,12 +4,14 @@ using UnityEngine.AI;
 
 public class BTMoveToTarget : BTNode
 {
-    private FieldOfView _fov;
-    private NavMeshAgent _agent;
-    public BTMoveToTarget(FieldOfView fov, NavMeshAgent agent)
+    FieldOfView _fov;
+    NPCController _npcController;
+
+    public BTMoveToTarget(FieldOfView fov, NPCController npcController)
     {
         _fov = fov;
-        _agent = agent;
+        _npcController = npcController;
+
     }
 
     public override BTNodeStates Evaluate()
@@ -28,6 +30,6 @@ public class BTMoveToTarget : BTNode
 
     private void FollowTarget(Transform target)
     {
-        _agent.SetDestination(target.position);
+        _npcController.FollowTarget(target.position);
     }
 }

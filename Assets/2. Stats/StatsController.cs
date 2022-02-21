@@ -21,8 +21,8 @@ public class StatsController : MonoBehaviour
     public delegate void DeathDelegate();
     public DeathDelegate deathDelegate;
 
-    public delegate void DamageDelegate();
-    public DamageDelegate damageDelegate;
+    //public delegate void DamageDelegate();
+    //public DamageDelegate damageDelegate;
 
     public bool isHit { get; private set; }
     public Vector3 hitPoint { get; private set; }
@@ -36,11 +36,12 @@ public class StatsController : MonoBehaviour
         deathDelegate += Die;
     }
 
-    public void TakeDamage(float damage, Vector3 hitPoint, Vector3 hitDirection)
+    public void TakeDamage(float damage, Vector3 bulletPos)
     {
         isHit = true;
         this.hitPoint = hitPoint;
-        this.hitDirection = hitDirection;
+        this.hitDirection = bulletPos - transform.position;
+        Debug.DrawLine(transform.position, transform.position + hitDirection * 5, Color.red, 1f);
 
         health -= damage;
         if (health <= 0)
@@ -48,7 +49,7 @@ public class StatsController : MonoBehaviour
             deathDelegate();
             return;
         }
-        damageDelegate();
+        //damageDelegate();
     }
 
     private void Die()

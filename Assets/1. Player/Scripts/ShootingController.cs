@@ -33,14 +33,6 @@ public class ShootingController : MonoBehaviour
             _bulletPool.Add(go);
         }
         shootTimer = 0f;
-
-        PlayerInputController.input_OnDrawWeaponDelegate += DrawWeapon;
-        PlayerInputController.input_OnFireDelegate += Fire;
-    }
-
-    private void DrawWeapon()
-    {
-        _isWeaponDrawn = true;
     }
 
     // Update is called once per frame
@@ -56,11 +48,7 @@ public class ShootingController : MonoBehaviour
 
     public void Fire()
     {
-        if(!_isWeaponDrawn)
-        {
-            Debug.LogWarning("Weapon is not drawn!!!! CLICK V");
-        }
-        if(shootTimer > fireRate && _isWeaponDrawn)
+        if(shootTimer > fireRate)
         {
             shootTimer = 0f;
 

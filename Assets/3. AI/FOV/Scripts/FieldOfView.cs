@@ -44,7 +44,7 @@ public class FieldOfView : MonoBehaviour
         _angleIncrease = fov / rayCount;
         _origin = Vector3.zero;
 
-        _dotAngleProduct = Mathf.Abs(Vector3.Dot(transform.forward, Utils.GetVectorFromAngle((360 - fov) / 2)));
+        _dotAngleProduct = Mathf.Abs(Vector3.Dot(transform.up, Utils.GetVectorFromAngle((360 - fov) / 2)));
 
         //_targetLockImage = Instantiate(targetLockPrefab);
     }
@@ -65,7 +65,7 @@ public class FieldOfView : MonoBehaviour
         if(useLocalTransform)
         {
             SetOrigin(transform.position);
-            SetAimDirection(transform.forward); 
+            SetAimDirection(transform.up); 
         }
 
         if(shouldVisualiseFOVField)
@@ -80,7 +80,6 @@ public class FieldOfView : MonoBehaviour
     {
         _angle = _startingAngle;
 
-
         Vector3[] vertices = new Vector3[rayCount + 1 + 1];
         Vector2[] uv = new Vector2[vertices.Length];
         int[] triangles = new int[rayCount * 3];
@@ -93,15 +92,15 @@ public class FieldOfView : MonoBehaviour
         {
             Vector3 vertex;
 
-            RaycastHit raycastHit;
             Vector3 direction = Utils.GetVectorFromAngle(_angle);
-            if (!Physics.Raycast(_origin, direction, out raycastHit, viewDistance, obstacleLayers))
+            RaycastHit2D raycastHit = Physics2D.Raycast(_origin, direction, viewDistance, obstacleLayers);
+            if (!raycastHit)
             {
                 vertex = _origin + Utils.GetVectorFromAngle(_angle) * viewDistance;
             }
             else
             {
-                vertex = raycastHit.point + (raycastHit.point - _origin)*fovObstacleOverlapDistance;
+                vertex = raycastHit.point + (raycastHit.point - new Vector2(_origin.x, _origin.y)) *fovObstacleOverlapDistance;
             }
 
             vertices[vertexIndex] = vertex;
@@ -128,19 +127,17 @@ public class FieldOfView : MonoBehaviour
     {
         visibleTargets = new List<Transform>();
 
-        Collider[] targets = Physics.OverlapSphere(_origin, viewDistance, targetsLayers);
-        foreach (Collider target in targets)
+        Collider2D[] targets = Physics2D.OverlapCircleAll(_origin, viewDistance, targetsLayers);
+        foreach (Collider2D target in targets)
         {
             Vector3 direction = target.transform.position - _origin;
-            RaycastHit hitInfo;
-            bool didRaycastHitObstacle = Physics.Raycast(_origin, direction, out hitInfo, viewDistance, obstacleLayers);
+            RaycastHit2D raycastHit = Physics2D.Raycast(_origin, direction, viewDistance, obstacleLayers);
             float distanceToTarget = Vector3.Distance(_origin, target.transform.position);
 
-            if (!didRaycastHitObstacle || distanceToTarget < hitInfo.distance)
+            if (!raycastHit || distanceToTarget < raycastHit.distance)
             {
-                Transform targetTransform = target.transform;
-                if (IsTargetInFOVField(targetTransform.position))
-                    visibleTargets.Add(targetTransform);
+                if (IsTargetInFOVField(target.transform.position))
+                    visibleTargets.Add(target.transform);
             }
         }
 
@@ -151,8 +148,8 @@ public class FieldOfView : MonoBehaviour
     {
         Vector3 direction = target - _origin;
     
-        float dotProduct = Vector3.Dot(transform.forward, direction.normalized);// If confused what dot is - google Dot Product
-        //Debug.Log("dotAngleProduct: " + dotAngleProduct + " : DotProduct: " + dotProduct);
+        float dotProduct = Vector3.Dot(transform.up, direction.normalized);// If confused what dot is - google Dot Product
+        //Debug.Log("dotAngleProduct: " + _dotAngleProduct + " : DotProduct: " + dotProduct);
         bool isTargetInsideFOVCone = dotProduct > _dotAngleProduct;
 
         if (isTargetInsideFOVCone)

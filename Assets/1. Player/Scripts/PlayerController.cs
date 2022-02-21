@@ -11,7 +11,12 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        ShootingController shootingController = GetComponent<ShootingController>();
+        if(shootingController == null)
+        {
+            Debug.LogError("Component not found: ShootingController");
+        }
+        PlayerInputController.input_OnFireDelegate += shootingController.Fire;
     }
 
     // Update is called once per frame

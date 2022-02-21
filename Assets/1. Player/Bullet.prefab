@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3293262365984728451}
   - component: {fileID: 2535309748870972535}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3262328607790721850}
   - component: {fileID: 6160847359272914008}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -183,7 +183,7 @@ GameObject:
   - component: {fileID: 7066249892176587496}
   - component: {fileID: 4838260872289233696}
   - component: {fileID: 847394361951536982}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -370,7 +370,7 @@ MonoBehaviour:
   trailRenderer: {fileID: 2202568186308289772}
   damage: 15
   selfDestroyTime: 2
-  selfDestroyDistance: 0.3
+  selfDestroyDistance: 3
 --- !u!50 &4838260872289233696
 Rigidbody2D:
   serializedVersion: 4
@@ -383,7 +383,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.001
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -428,7 +428,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7282241274462906837}
   - component: {fileID: 5904382862890431442}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Square (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

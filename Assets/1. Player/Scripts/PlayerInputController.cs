@@ -12,7 +12,6 @@ public class PlayerInputController : MonoBehaviour
         controls.Player.Movement.performed += ctx => Move(ctx.ReadValue<Vector2>());
     } --- Consider changing into this*/
 
-
     public delegate void Input_OnMoveDelegate(Vector2 movementDirection);
     public static Input_OnMoveDelegate input_OnMoveDelegate;
 
@@ -22,8 +21,6 @@ public class PlayerInputController : MonoBehaviour
     public delegate void Input_OnSprintDelegate(bool isSprinting);
     public static Input_OnSprintDelegate input_OnSprintDelegate;
 
-    public delegate void Input_OnDrawWeaponDelegate();
-    public static Input_OnDrawWeaponDelegate input_OnDrawWeaponDelegate;
 
     public delegate void Input_OnSpinCameraDelegate(int direction);
     public static Input_OnSpinCameraDelegate input_OnSpinCameraDelegate;
@@ -53,14 +50,6 @@ public class PlayerInputController : MonoBehaviour
     public void OnSprint(InputAction.CallbackContext context)
     {
         input_OnSprintDelegate(context.started || context.performed);
-    }
-
-    public void OnDrawWeapon(InputAction.CallbackContext context)
-    {
-        if (context.started)
-        {
-            input_OnDrawWeaponDelegate();
-        }
     }
 
     public void OnTurnCamera(InputAction.CallbackContext context)

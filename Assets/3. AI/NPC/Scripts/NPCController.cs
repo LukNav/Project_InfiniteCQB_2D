@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -16,9 +17,9 @@ public class NPCController : MonoBehaviour
     //public GameObject weaponGO;
 
 
-    private NavMeshAgent _agent;
+    //private NavMeshAgent _agent;
     private ShootingController _shootingController;
-    private NPCAnimator _animatorController;
+    //private NPCAnimator _animatorController;
     public StatsController statsController { get; private set; }
     private BTSelector _rootBT;
     private Timer scanTimer;
@@ -26,6 +27,9 @@ public class NPCController : MonoBehaviour
 
     public bool isRotating = false;
     public float elapsedRotationTime = 0f;
+
+    
+
     public float rotationAngle;
     
 
@@ -37,30 +41,38 @@ public class NPCController : MonoBehaviour
         GetComponent<StatsController>().deathDelegate += OnDeath;
         rotationAngle = transform.eulerAngles.y;
 
-        _agent = GetComponent<NavMeshAgent>();
-        if(_agent == null)
-        {
-            Debug.LogError("Missing component: NavMeshAgent");
-        }
+        //_agent = GetComponent<NavMeshAgent>();
+        //if(_agent == null)
+        //{
+        //    Debug.LogError("Missing component: NavMeshAgent");
+        //}
 
         _shootingController = GetComponent<ShootingController>();
         if (_shootingController == null)
         {
             Debug.LogError("Missing component: ShootingController");
+            return;
         }
 
-        _animatorController = GetComponent<NPCAnimator>();
-        if (_animatorController == null)
-        {
-            Debug.LogError("Missing component: NPCAnimator");
-        }
+        //_animatorController = GetComponent<NPCAnimator>();
+        //if (_animatorController == null)
+        //{
+        //    Debug.LogError("Missing component: NPCAnimator");
+        //}
 
         statsController = GetComponent<StatsController>();
         if (statsController == null)
         {
             Debug.LogError("Missing component: StatsController");
+            return;
         }
 
+        fovController = GetComponent<FieldOfView>();
+        if (fovController == null)
+        {
+            Debug.LogError("Missing component: FieldOfView");
+            return;
+        }
 
         scanTimer = new Timer(scanDelay);
         angleChangeTimer = new Timer(angleChangeDelay);
@@ -72,8 +84,7 @@ public class NPCController : MonoBehaviour
             new BTTimer_Stop(scanTimer),
             new BTTimer_Stop(angleChangeTimer),
             new BTRotateToTarget(this, fovController),
-            new BTMoveToTarget(fovController, _agent),
-            new BTPlayAnimation(_animatorController.rigController, _animatorController.drawAnimationName),
+            new BTMoveToTarget(fovController, this),
             new BTShootTarget(_shootingController, fovController)
         });
 
@@ -149,24 +160,59 @@ public class NPCController : MonoBehaviour
         if(!isRotating)
             return;
 
-        float currentRotation_y = transform.eulerAngles.y;
-        if (Mathf.Abs(Mathf.DeltaAngle(currentRotation_y, rotationAngle)) < 0.1f)//is npc rotated close enough to the angle
+        float currentRotation_z = transform.eulerAngles.z;
+        if (Mathf.Abs(Mathf.DeltaAngle(currentRotation_z, rotationAngle)) < 0.1f)//is npc rotated close enough to the angle
         {
             isRotating = false;
             elapsedRotationTime = 0f;
         }
         else
         {
-            transform.eulerAngles = new Vector3(0f, Mathf.LerpAngle(currentRotation_y, rotationAngle, elapsedRotationTime / rotationDuration), 0f);
+            transform.eulerAngles = new Vector3(0f, 0f, -Mathf.LerpAngle(currentRotation_z, rotationAngle, elapsedRotationTime / rotationDuration));
             elapsedRotationTime += Time.deltaTime;
+        }
+    }
+
+    Coroutine _followPathCoroutine;
+    public float speed = 1f;
+    public void FollowTarget(Vector3 targetPos)
+    {
+        PathRequestManager.RequestPath(transform.position, targetPos, OnPathFound);
+    }
+    public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
+    {
+        if (pathSuccessful)
+        {
+            if (_followPathCoroutine != null)
+                StopCoroutine(_followPathCoroutine);
+            _followPathCoroutine = StartCoroutine(FollowPath(newPath));
+        }
+    }
+
+    IEnumerator FollowPath(Vector3[] path)
+    {
+        Vector3 currentWaypoint = path[0];
+        int targetIndex = 0;
+        while (true)
+        {
+            if (transform.position == currentWaypoint)
+            {
+                targetIndex++;
+                if (targetIndex >= path.Length)
+                {
+                    yield break;
+                }
+                currentWaypoint = path[targetIndex];
+            }
+
+            transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, speed * Time.deltaTime);
+            yield return null;
         }
     }
 
     public void OnDisable()
     {
         fovController.enabled = false;
-        _agent.enabled = false;
-        _animatorController.enabled = false;
     }
 
     
