@@ -368,9 +368,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trailRenderer: {fileID: 2202568186308289772}
+  colliderLayers:
+    serializedVersion: 2
+    m_Bits: 448
   damage: 15
   selfDestroyTime: 2
-  selfDestroyDistance: 3
+  selfDestroyDistance: 0.2
 --- !u!50 &4838260872289233696
 Rigidbody2D:
   serializedVersion: 4

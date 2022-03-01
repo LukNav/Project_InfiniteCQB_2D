@@ -141,6 +141,8 @@ public class NPCController : MonoBehaviour
     private void OnDeath()
     {
         //weaponGO.SetActive(false);
+        StopCoroutine(_followPathCoroutine);
+        Destroy(gameObject);
     }
 
     // Update is called once per frame

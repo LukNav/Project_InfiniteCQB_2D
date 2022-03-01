@@ -54,6 +54,8 @@ public class StatsController : MonoBehaviour
 
     private void Die()
     {
+        //Implement this on controllers using subscribtions to OnDeath delegate
+
         ////animator.enabled = false;
         //collider.enabled = false;
         //rigidBody.isKinematic = true;
@@ -64,7 +66,7 @@ public class StatsController : MonoBehaviour
         //weaponCollider.SetActive(true);
 
         
-        Destroy(gameObject);
+        //Destroy(gameObject, Time.deltaTime);//destroy on next frame
     }
 
     public void ResetHitInfo()
