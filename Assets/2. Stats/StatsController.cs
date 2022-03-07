@@ -22,19 +22,25 @@ public class StatsController : MonoBehaviour// NOTE - player must be in layer of
     public delegate void DeathDelegate();
     public DeathDelegate deathDelegate;
 
-    public delegate void DamageDelegate();
-    public DamageDelegate damageDelegate;
+    public delegate void HealthUpdateDelegate();
+    public HealthUpdateDelegate healthUpdateDelegate;
+    
+    public delegate void HealthConsumableDelegate();
+    public HealthConsumableDelegate healthConsumableDelegate;
 
     public bool isHit { get; private set; }
     public Vector3 hitPoint { get; private set; }
     public Vector3 hitDirection { get; private set; }
-    bool isDead { get { return health <= 0; } }
+    private bool isDead { get { return health <= 0; } }
+    private bool isPlayer;
 
     public void Awake()
     {
         initialHealth = health;
         isHit = false;
         deathDelegate += Die;
+
+        isPlayer = LayerMask.NameToLayer("Player") == gameObject.layer;
     }
 
     public void TakeDamage(float damage, Vector3 bulletPos)
@@ -50,8 +56,18 @@ public class StatsController : MonoBehaviour// NOTE - player must be in layer of
             deathDelegate();
             return;
         }
-        if(LayerMask.NameToLayer("Player") == gameObject.layer)
-            damageDelegate();
+        if(isPlayer)
+            healthUpdateDelegate();
+    }
+
+    public void Heal(float healAmount)
+    {
+        health = Mathf.Clamp(health + healAmount, 0f, initialHealth);
+        if (isPlayer)
+        {
+            healthConsumableDelegate();
+            healthUpdateDelegate();
+        }        
     }
 
     private void Die()
