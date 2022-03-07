@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class StatsController : MonoBehaviour
+public class StatsController : MonoBehaviour// NOTE - player must be in layer of Player in order for this script to work with UI -- need to think of something more clear
 {
     public float health = 100;
     public float initialHealth { get; private set; }
@@ -21,8 +22,8 @@ public class StatsController : MonoBehaviour
     public delegate void DeathDelegate();
     public DeathDelegate deathDelegate;
 
-    //public delegate void DamageDelegate();
-    //public DamageDelegate damageDelegate;
+    public delegate void DamageDelegate();
+    public DamageDelegate damageDelegate;
 
     public bool isHit { get; private set; }
     public Vector3 hitPoint { get; private set; }
@@ -49,7 +50,8 @@ public class StatsController : MonoBehaviour
             deathDelegate();
             return;
         }
-        //damageDelegate();
+        if(LayerMask.NameToLayer("Player") == gameObject.layer)
+            damageDelegate();
     }
 
     private void Die()
@@ -66,7 +68,7 @@ public class StatsController : MonoBehaviour
         //weaponCollider.SetActive(true);
 
         
-        //Destroy(gameObject, Time.deltaTime);//destroy on next frame
+        Destroy(gameObject, Time.deltaTime);//destroy on next frame
     }
 
     public void ResetHitInfo()
