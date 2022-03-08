@@ -12,7 +12,7 @@ public class UIController : MonoBehaviour
     public GameObject deathScreen;
     public GameObject inGameScreen;
     public Slider hpSlider;
-    public TMP_Text consumableCounter;
+    public TMP_Text consumableCounterText;
 
     private int healthConsumableCounter = 0;
 
@@ -21,13 +21,12 @@ public class UIController : MonoBehaviour
         hpSlider.value = playerStatsController.initialHealth;
         playerStatsController.deathDelegate += SetActiveDeathScreen;
         playerStatsController.healthUpdateDelegate += UpdateHealthBar;
-        playerStatsController.healthConsumableDelegate += ConsumableCounter_AddOne;
+        Consumable.healthConsumableDelegate += ConsumableCounter_AddOne;
     }
 
     private void UpdateHealthBar()
     {
         hpSlider.value = playerStatsController.health/ playerStatsController.initialHealth;
-        consumableCounter.text = consumableCounter.ToString();
     }
 
     private void SetActiveDeathScreen()
@@ -36,9 +35,10 @@ public class UIController : MonoBehaviour
         deathScreen.SetActive(true);
     }
 
-    private void ConsumableCounter_AddOne()
+    private void ConsumableCounter_AddOne(float healthAdded)
     {
-        consumableCounter.text = consumableCounter.ToString();
+        healthConsumableCounter++;
+        consumableCounterText.text = healthConsumableCounter.ToString();
     }
 
     public void Restart()

@@ -24,9 +24,6 @@ public class StatsController : MonoBehaviour// NOTE - player must be in layer of
 
     public delegate void HealthUpdateDelegate();
     public HealthUpdateDelegate healthUpdateDelegate;
-    
-    public delegate void HealthConsumableDelegate();
-    public HealthConsumableDelegate healthConsumableDelegate;
 
     public bool isHit { get; private set; }
     public Vector3 hitPoint { get; private set; }
@@ -39,7 +36,7 @@ public class StatsController : MonoBehaviour// NOTE - player must be in layer of
         initialHealth = health;
         isHit = false;
         deathDelegate += Die;
-
+        Consumable.healthConsumableDelegate += Heal;
         isPlayer = LayerMask.NameToLayer("Player") == gameObject.layer;
     }
 
@@ -65,7 +62,6 @@ public class StatsController : MonoBehaviour// NOTE - player must be in layer of
         health = Mathf.Clamp(health + healAmount, 0f, initialHealth);
         if (isPlayer)
         {
-            healthConsumableDelegate();
             healthUpdateDelegate();
         }        
     }
@@ -92,5 +88,13 @@ public class StatsController : MonoBehaviour// NOTE - player must be in layer of
         isHit = false;
         hitPoint = Vector3.zero;
         hitDirection = Vector3.zero;
+    }
+
+    void OnGUI()
+    {
+        if (isPlayer && GUI.Button(new Rect(10, 100, 100, 30), "Get Consumable"))
+        {
+            Consumable.healthConsumableDelegate(20);
+        }
     }
 }
