@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     public Vector3 mouseTarget { get; private set; }
     public float distanceFromCharacterToMouse { get; private set; }
 
+    private CameraController _cameraController { get; set; }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +19,19 @@ public class PlayerController : MonoBehaviour
             Debug.LogError("Component not found: ShootingController");
         }
         PlayerInputController.input_OnFireDelegate += shootingController.Fire;
+
+        StatsController statsController = GetComponent<StatsController>();
+        if (statsController == null)
+        {
+            Debug.LogError("Component not found: StatsController");
+        }
+        statsController.deathDelegate += OnDeath;
+
+        _cameraController = GetComponent<CameraController>();
+        if (_cameraController == null)
+        {
+            Debug.LogError("Component not found: CameraController");
+        }
     }
 
     // Update is called once per frame
@@ -35,5 +50,10 @@ public class PlayerController : MonoBehaviour
             mouseTarget = ray.GetPoint(distance);
             distanceFromCharacterToMouse = Vector3.Distance(transform.position, mouseTarget);
         }
+    }
+
+    private void OnDeath()
+    {
+        gameObject.SetActive(false);
     }
 }

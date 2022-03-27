@@ -73,6 +73,8 @@ public class NPCController : MonoBehaviour, IBTScanningController
         }
     }
 
+    private bool isDead = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -131,12 +133,17 @@ public class NPCController : MonoBehaviour, IBTScanningController
             new BTSetFollowTargetStateFalse(this)
         });
 
+        BTSequence resetScanningStates = new BTSequence(new List<BTNode>
+        {
+            new BTTimer_Stop(scanTimer),
+            new BTTimer_Stop(angleChangeTimer)
+        });
+
         BTSequence isHitSequence = new BTSequence(new List<BTNode>
         {
             new BTIsHit(statsController),
             resetFollowTargetStates,
-            new BTTimer_Stop(scanTimer),
-            new BTTimer_Stop(angleChangeTimer),
+            resetScanningStates,
             new BTRotateToHitDirection(this)
         });
 
@@ -183,8 +190,10 @@ public class NPCController : MonoBehaviour, IBTScanningController
     private void OnDeath()
     {
         //weaponGO.SetActive(false);
-        StopCoroutine(_followPathCoroutine);
-        Destroy(gameObject);
+        isDead = true;
+        if(_followPathCoroutine != null)
+            StopCoroutine(_followPathCoroutine);
+        Destroy(gameObject, Time.deltaTime);
     }
 
     // Update is called once per frame
@@ -213,18 +222,13 @@ public class NPCController : MonoBehaviour, IBTScanningController
     Coroutine _followPathCoroutine;
     public float speed = 1f;
 
-    public NPCController(float scanningRotationAngle)
-    {
-        this.scanningRotationAngle = scanningRotationAngle;
-    }
-
     public void FollowTarget(Vector3 targetPos)
     {
         PathRequestManager.RequestPath(transform.position, targetPos, OnPathFound);
     }
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
     {
-        if (pathSuccessful)
+        if (pathSuccessful && !isDead)
         {
             if (_followPathCoroutine != null)
                 StopCoroutine(_followPathCoroutine);

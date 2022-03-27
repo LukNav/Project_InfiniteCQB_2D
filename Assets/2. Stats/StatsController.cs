@@ -78,7 +78,7 @@ public class StatsController : MonoBehaviour// NOTE - player must be in layer of
         //weaponCollider.SetActive(true);
 
         
-        Destroy(gameObject, Time.deltaTime);//destroy on next frame
+        //Destroy(gameObject, Time.deltaTime);///destroy on next frame
     }
 
     public void ResetHitInfo()

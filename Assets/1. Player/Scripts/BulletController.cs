@@ -45,7 +45,7 @@ public class BulletController : MonoBehaviour
     {
         Debug.Log("Bullet HIT");
         StatsController statsController;
-        if(other.transform.parent.TryGetComponent<StatsController>(out statsController))
+        if(other.transform.parent.parent.TryGetComponent<StatsController>(out statsController))
             statsController.TakeDamage(damage, (_originalPos - statsController.transform.position).normalized);
         else if(other.transform.TryGetComponent<StatsController>(out statsController))
             statsController.TakeDamage(damage, (_originalPos - statsController.transform.position).normalized);
