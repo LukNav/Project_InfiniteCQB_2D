@@ -7,17 +7,17 @@ using UnityEngine.AI;
 public class NPCController : MonoBehaviour
 {
     public bool shouldFollowTarget = true;
-    public FieldOfView fovController;
 
     [Header("Scan settings")]
-    public float rotationDuration = 0.5f;
     public float scanDelay = 2f;
     public float angleChangeDelay = 3;
-
+    public AnimationCurve rotationSpeedCurve;
+    private float _rotationSpeedCurveElapsedTime = 0f;
     //public GameObject weaponGO;
 
 
     //private NavMeshAgent _agent;
+    private FieldOfView _fovController;
     private ShootingController _shootingController;
     //private NPCAnimator _animatorController;
     public StatsController statsController { get; private set; }
@@ -25,12 +25,25 @@ public class NPCController : MonoBehaviour
     private Timer scanTimer;
     private Timer angleChangeTimer;
 
-    public bool isRotating = false;
     public float elapsedRotationTime = 0f;
 
-    
+    public bool isRotating { get { return elapsedRotationTime < 1; } }
+    public bool isScanning = false;
+    public bool isFollowingTarget = false;
 
-    public float rotationAngle;
+    private Vector3 _rotationDiorection;
+    public Vector3 rotationDirection
+    {
+        get
+        {
+            return _rotationDiorection;
+        }
+        set
+        {
+            elapsedRotationTime = 0f;
+            _rotationDiorection = value;
+        }
+    }
     
 
 
@@ -39,7 +52,6 @@ public class NPCController : MonoBehaviour
     {
 
         GetComponent<StatsController>().deathDelegate += OnDeath;
-        rotationAngle = transform.eulerAngles.y;
 
         //_agent = GetComponent<NavMeshAgent>();
         //if(_agent == null)
@@ -67,8 +79,8 @@ public class NPCController : MonoBehaviour
             return;
         }
 
-        fovController = GetComponent<FieldOfView>();
-        if (fovController == null)
+        _fovController = GetComponent<FieldOfView>();
+        if (_fovController == null)
         {
             Debug.LogError("Missing component: FieldOfView");
             return;
@@ -80,26 +92,31 @@ public class NPCController : MonoBehaviour
 
         BTSequence followTargetSequence = new BTSequence(new List<BTNode>
         {
-            new BTCanSeeTarget(fovController),
+            new BTCanSeeTarget(_fovController),
             new BTTimer_Stop(scanTimer),
             new BTTimer_Stop(angleChangeTimer),
-            new BTRotateToTarget(this, fovController),
-            new BTMoveToTarget(fovController, this),
-            new BTShootTarget(_shootingController, fovController)
+            new BTRotateToTarget(this, _fovController),
+            new BTMoveToTarget(_fovController, this),
+            new BTShootTarget(_shootingController, _fovController)
         });
 
+        BTSequence resetFollowTargetStates = new BTSequence(new List<BTNode>
+        {
+            new BTSetFollowTargetStateFalse(this)
+        });
 
         BTSequence isHitSequence = new BTSequence(new List<BTNode>
         {
             new BTIsHit(statsController),
+            resetFollowTargetStates,
+            new BTTimer_Stop(scanTimer),
+            new BTTimer_Stop(angleChangeTimer),
             new BTRotateToHitDirection(this),
             new BTSelector(new List<BTNode>//yEd Graph name: HasRotated
             {
                 new BTSequence(new List<BTNode>
                 {
                     new BTIsNotRotating(this),
-                    new BTTimer_Stop(scanTimer),
-                    new BTTimer_Stop(angleChangeTimer),
                     new BTResetHitInfo(statsController)
                 }),
                 new BTSuccess()
@@ -108,6 +125,7 @@ public class NPCController : MonoBehaviour
 
         BTSequence scanSequence = new BTSequence(new List<BTNode>
         {
+            resetFollowTargetStates,
             new BTTimer_Start(scanTimer),
             new BTSelector(new List<BTNode>//yEd Graph name: DelayTheScanningStart
             {
@@ -136,6 +154,8 @@ public class NPCController : MonoBehaviour
             isHitSequence,
             scanSequence
         });
+
+        
     }
 
     private void OnDeath()
@@ -157,22 +177,15 @@ public class NPCController : MonoBehaviour
         RotateToSetAngle();
     }
 
+
     private void RotateToSetAngle()
     {
-        if(!isRotating)
+        if (elapsedRotationTime > 1)
             return;
 
-        float currentRotation_z = transform.eulerAngles.z;
-        if (Mathf.Abs(Mathf.DeltaAngle(currentRotation_z, rotationAngle)) < 0.1f)//is npc rotated close enough to the angle
-        {
-            isRotating = false;
-            elapsedRotationTime = 0f;
-        }
-        else
-        {
-            transform.eulerAngles = new Vector3(0f, 0f, -Mathf.LerpAngle(currentRotation_z, rotationAngle, elapsedRotationTime / rotationDuration));
-            elapsedRotationTime += Time.deltaTime;
-        }
+        Quaternion targetRotation = Quaternion.LookRotation(Vector3.forward, rotationDirection);
+        elapsedRotationTime += Time.deltaTime;
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeedCurve.Evaluate(elapsedRotationTime));
     }
 
     Coroutine _followPathCoroutine;
@@ -214,7 +227,7 @@ public class NPCController : MonoBehaviour
 
     public void OnDisable()
     {
-        fovController.enabled = false;
+        _fovController.enabled = false;
     }
 
     

@@ -1,6 +1,6 @@
 ﻿public class BTSuccess : BTNode
 {
-    public BTSuccess()
+    public BTSuccess() 
     {
     }
 

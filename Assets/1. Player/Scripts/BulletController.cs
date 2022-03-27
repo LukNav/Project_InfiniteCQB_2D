@@ -11,11 +11,13 @@ public class BulletController : MonoBehaviour
     public float selfDestroyDistance = 0.3f;
 
     private bool _isActive = false;
+    private Vector3 _originalPos;
     private RaycastHit2D _rayHit;
 
     private void OnEnable()
     {
         trailRenderer.Clear();
+        _originalPos = transform.position;
         Invoke("DestroySelf", selfDestroyTime);
         _isActive = true;
     }
@@ -25,7 +27,7 @@ public class BulletController : MonoBehaviour
         CancelInvoke("DestroySelf");
         _isActive = false;
     }
-
+    
     public void Update()
     {
         if (_isActive)
@@ -44,9 +46,11 @@ public class BulletController : MonoBehaviour
         Debug.Log("Bullet HIT");
         StatsController statsController;
         if(other.transform.parent.TryGetComponent<StatsController>(out statsController))
-            statsController.TakeDamage(damage, hitPoint);
+            statsController.TakeDamage(damage, (_originalPos - statsController.transform.position).normalized);
         else if(other.transform.TryGetComponent<StatsController>(out statsController))
-            statsController.TakeDamage(damage, hitPoint);
+            statsController.TakeDamage(damage, (_originalPos - statsController.transform.position).normalized);
+
+        Debug.DrawLine(statsController.transform.position, statsController.transform.position+(_originalPos - statsController.transform.position).normalized * 10, Color.yellow, 3f);
 
         DestroySelf();
     }

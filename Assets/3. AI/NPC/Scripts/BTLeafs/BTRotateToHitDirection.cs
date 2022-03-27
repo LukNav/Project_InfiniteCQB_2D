@@ -14,16 +14,8 @@ public class BTRotateToHitDirection : BTNode
 
     public override BTNodeStates Evaluate()
     {
-        if (IsAlreadyRotatingToSameDirection())
-        {
-            currentNodeState = BTNodeStates.SUCCESS;
-            return currentNodeState;
-        }
+        SetRotationAngle();
 
-        _npcController.elapsedRotationTime = 0f;
-        SetAngleToTarget();
-
-        _npcController.isRotating = true;
         currentNodeState = BTNodeStates.SUCCESS;
         return currentNodeState;
     }
@@ -32,16 +24,16 @@ public class BTRotateToHitDirection : BTNode
     /// Sets Rotation angle on NPCController to the direction of target
     /// </summary>
     /// <returns>return false if angle is already set</returns>
-    private void SetAngleToTarget()
+    private void SetRotationAngle()
     {
         _hitDirection = _statsController.hitDirection;
         float angle = Mathf.Atan2(_hitDirection.x, _hitDirection.y) * Mathf.Rad2Deg;
-
-        _npcController.rotationAngle = angle;
+        //if(!IsAlreadyRotatingToSameDirection())
+            _npcController.rotationDirection = _hitDirection;
     }
 
-    private bool IsAlreadyRotatingToSameDirection()
-    {
-        return _hitDirection == _statsController.hitDirection;
-    }
+    //private bool IsAlreadyRotatingToSameDirection()
+    //{
+    //    return _hitDirection == _statsController.hitDirection;
+    //}
 }

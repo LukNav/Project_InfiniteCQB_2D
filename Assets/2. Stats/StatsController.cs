@@ -40,12 +40,12 @@ public class StatsController : MonoBehaviour// NOTE - player must be in layer of
         isPlayer = LayerMask.NameToLayer("Player") == gameObject.layer;
     }
 
-    public void TakeDamage(float damage, Vector3 bulletPos)
+    public void TakeDamage(float damage, Vector3 hitDirection)
     {
         isHit = true;
         this.hitPoint = hitPoint;
-        this.hitDirection = bulletPos - transform.position;
-        Debug.DrawLine(transform.position, transform.position + hitDirection * 5, Color.red, 1f);
+        this.hitDirection = hitDirection;
+        //Debug.DrawLine(transform.position, transform.position + hitDirection * 5, Color.red, 1f);
 
         health -= damage;
         if (health <= 0)
