@@ -5,7 +5,9 @@ public class BTRotateToHitDirection : BTNode
 {
     private NPCController _npcController;
     private StatsController _statsController;
-    private Vector3 _hitDirection;
+
+    private float _previousAngle = -999f;
+
     public BTRotateToHitDirection(NPCController npcController)
     {
         _npcController = npcController;
@@ -14,26 +16,41 @@ public class BTRotateToHitDirection : BTNode
 
     public override BTNodeStates Evaluate()
     {
-        SetRotationAngle();
+        float angle = CalculateAngle(_statsController.hitDirection+_npcController.transform.position);
+        bool hasFinishedRoatating = Mathf.Abs(angle - _previousAngle) < 0.005;
 
+        if (!hasFinishedRoatating)
+            TurnToHitDirection(angle);
+        else
+            _statsController.ResetHitInfo();
+
+        _previousAngle = angle;
         currentNodeState = BTNodeStates.SUCCESS;
         return currentNodeState;
     }
 
-    /// <summary>
-    /// Sets Rotation angle on NPCController to the direction of target
-    /// </summary>
-    /// <returns>return false if angle is already set</returns>
-    private void SetRotationAngle()
+    private void TurnToHitDirection(float angle)
     {
-        _hitDirection = _statsController.hitDirection;
-        float angle = Mathf.Atan2(_hitDirection.x, _hitDirection.y) * Mathf.Rad2Deg;
-        //if(!IsAlreadyRotatingToSameDirection())
-            _npcController.rotationDirection = _hitDirection;
+
+        if (angle >= 180f) angle = 180f - angle;
+        if (angle <= -180f) angle = -180f + angle;
+
+        Quaternion targetRotation =
+            _npcController.transform.rotation *
+            Quaternion.Euler(0f, 0f, Mathf.Clamp(angle, -_npcController.QuickRotationSpeed * Time.deltaTime, _npcController.QuickRotationSpeed * Time.deltaTime));
+
+        //if ((turretControllerObject.yawLimit < 360f) && (turretControllerObject.yawLimit > 0f))
+        //    yawSegment.rotation = Quaternion.RotateTowards(yawSegment.parent.rotation * yawSegmentStartRotation, targetRotation, turretControllerObject.yawLimit);
+        /*else */
+        _npcController.transform.rotation = targetRotation;
+        
     }
 
-    //private bool IsAlreadyRotatingToSameDirection()
-    //{
-    //    return _hitDirection == _statsController.hitDirection;
-    //}
+    private float CalculateAngle(Vector3 target)
+    {
+        float angle = 0f;
+        Vector3 targetRelative = _npcController.transform.InverseTransformPoint(target);
+        angle = Mathf.Atan2(targetRelative.y, targetRelative.x) * Mathf.Rad2Deg - 90f;
+        return angle;
+    }
 }

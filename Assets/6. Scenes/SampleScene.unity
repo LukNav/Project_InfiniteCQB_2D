@@ -509,9 +509,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f5330746e7146d419c9a460a8494533, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CalmRotationSpeed: 200
+  QuickRotationSpeed: 1000
   shouldFollowTarget: 1
-  scanDelay: 2
-  angleChangeDelay: 5
+  scanDelay: 3
+  angleChangeDelay: 1
   rotationSpeedCurve:
     serializedVersion: 2
     m_Curve:

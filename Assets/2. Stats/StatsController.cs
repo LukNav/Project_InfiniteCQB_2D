@@ -26,7 +26,6 @@ public class StatsController : MonoBehaviour// NOTE - player must be in layer of
     public HealthUpdateDelegate healthUpdateDelegate;
 
     public bool isHit { get; private set; }
-    public Vector3 hitPoint { get; private set; }
     public Vector3 hitDirection { get; private set; }
     private bool isDead { get { return health <= 0; } }
     private bool isPlayer;
@@ -43,7 +42,6 @@ public class StatsController : MonoBehaviour// NOTE - player must be in layer of
     public void TakeDamage(float damage, Vector3 hitDirection)
     {
         isHit = true;
-        this.hitPoint = hitPoint;
         this.hitDirection = hitDirection;
         //Debug.DrawLine(transform.position, transform.position + hitDirection * 5, Color.red, 1f);
 
@@ -86,7 +84,6 @@ public class StatsController : MonoBehaviour// NOTE - player must be in layer of
     public void ResetHitInfo()
     {
         isHit = false;
-        hitPoint = Vector3.zero;
         hitDirection = Vector3.zero;
     }
 

@@ -4,17 +4,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class NPCController : MonoBehaviour
+public class NPCController : MonoBehaviour, IBTScanningController
 {
+    //Scriptable Object properties:
+    public float CalmRotationSpeed = 500f;
+    public float QuickRotationSpeed = 1000f;
+
+
     public bool shouldFollowTarget = true;
 
     [Header("Scan settings")]
     public float scanDelay = 2f;
     public float angleChangeDelay = 3;
     public AnimationCurve rotationSpeedCurve;
-    private float _rotationSpeedCurveElapsedTime = 0f;
     //public GameObject weaponGO;
 
+
+    public float scanningRotationSpeed { get { return CalmRotationSpeed; } }
+    
 
     //private NavMeshAgent _agent;
     private FieldOfView _fovController;
@@ -44,8 +51,27 @@ public class NPCController : MonoBehaviour
             _rotationDiorection = value;
         }
     }
-    
 
+    public float scanningRotationAngle { get; set; }
+    public Quaternion rotation
+    {
+        get 
+        { 
+            return transform.rotation; 
+        }
+        set
+        {
+            transform.rotation = value;
+        }
+    }
+
+    public bool hasRotated
+    {
+        get
+        {
+            return Mathf.DeltaAngle(transform.rotation.eulerAngles.z, scanningRotationAngle) < 0.005f;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -111,16 +137,7 @@ public class NPCController : MonoBehaviour
             resetFollowTargetStates,
             new BTTimer_Stop(scanTimer),
             new BTTimer_Stop(angleChangeTimer),
-            new BTRotateToHitDirection(this),
-            new BTSelector(new List<BTNode>//yEd Graph name: HasRotated
-            {
-                new BTSequence(new List<BTNode>
-                {
-                    new BTIsNotRotating(this),
-                    new BTResetHitInfo(statsController)
-                }),
-                new BTSuccess()
-            })
+            new BTRotateToHitDirection(this)
         });
 
         BTSequence scanSequence = new BTSequence(new List<BTNode>
@@ -137,12 +154,17 @@ public class NPCController : MonoBehaviour
                     {
                         new BTSequence(new List<BTNode>
                         {
+                            new BTIsRotatingToScanningAngle(this),
+                            new BTRotateToScanningAngle(this)
+                        }),
+                        new BTSequence(new List<BTNode>
+                        {
                             new BTTimer_HasEnded(angleChangeTimer),
-                            new BTRotateToRandomAngle(this, 90f, true),
+                            new BTSetScanningAngle(this, 160f, true),
                             new BTTimer_Restart(angleChangeTimer)
-                        })
+                        }),
+                        
                     }),
-                    new BTSuccess()
                 }),
                 new BTSuccess()
             })
@@ -155,7 +177,7 @@ public class NPCController : MonoBehaviour
             scanSequence
         });
 
-        
+
     }
 
     private void OnDeath()
@@ -190,6 +212,12 @@ public class NPCController : MonoBehaviour
 
     Coroutine _followPathCoroutine;
     public float speed = 1f;
+
+    public NPCController(float scanningRotationAngle)
+    {
+        this.scanningRotationAngle = scanningRotationAngle;
+    }
+
     public void FollowTarget(Vector3 targetPos)
     {
         PathRequestManager.RequestPath(transform.position, targetPos, OnPathFound);
@@ -229,6 +257,4 @@ public class NPCController : MonoBehaviour
     {
         _fovController.enabled = false;
     }
-
-    
 }
