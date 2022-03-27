@@ -49,9 +49,6 @@ public class BulletController : MonoBehaviour
             statsController.TakeDamage(damage, (_originalPos - statsController.transform.position).normalized);
         else if(other.transform.TryGetComponent<StatsController>(out statsController))
             statsController.TakeDamage(damage, (_originalPos - statsController.transform.position).normalized);
-
-        Debug.DrawLine(statsController.transform.position, statsController.transform.position+(_originalPos - statsController.transform.position).normalized * 10, Color.yellow, 3f);
-
         DestroySelf();
     }
 
