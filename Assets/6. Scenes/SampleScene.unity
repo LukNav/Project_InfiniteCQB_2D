@@ -18041,7 +18041,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1039750921
 Transform:
   m_ObjectHideFlags: 0
@@ -26905,6 +26905,7 @@ GameObject:
   - component: {fileID: 1674136600}
   - component: {fileID: 1674136601}
   - component: {fileID: 1674136605}
+  - component: {fileID: 1674136611}
   - component: {fileID: 1674136604}
   - component: {fileID: 1674136602}
   - component: {fileID: 1674136603}
@@ -26912,7 +26913,6 @@ GameObject:
   - component: {fileID: 1674136608}
   - component: {fileID: 1674136609}
   - component: {fileID: 1674136610}
-  - component: {fileID: 1674136611}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -27145,8 +27145,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ce2ddae8e8b2144f871d2db0af1733f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 2.5
-  sprintSpeed: 6
+  walkSpeed: 2
+  sprintSpeed: 4
   walkRotationSmoothTime: 0.5
   sprintRotationSmoothTime: 0.2
   turnDampTime: 0.1
@@ -27227,7 +27227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4319ace9d5eb0ca48a46597596004271, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  health: 10000
 --- !u!114 &1674136611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27240,8 +27240,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00f84da0f4a46314985bf8c09e1964b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 1.5
-  sprintSpeed: 5
+  walkSpeed: 1
+  sprintSpeed: 1.5
   animator: {fileID: 6124836478309496154}
 --- !u!1 &1685768861
 GameObject:
@@ -28176,6 +28176,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 256366569}
     m_Modifications:
+    - target: {fileID: 387302616173329007, guid: 81d5f8d4b236ce143b1b29aa30206239, type: 3}
+      propertyPath: walkSpeed
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3747662729021581548, guid: 81d5f8d4b236ce143b1b29aa30206239, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -28223,18 +28227,6 @@ PrefabInstance:
     - target: {fileID: 3747662729021581550, guid: 81d5f8d4b236ce143b1b29aa30206239, type: 3}
       propertyPath: m_Name
       value: AI_Beater
-      objectReference: {fileID: 0}
-    - target: {fileID: 4640596077637138780, guid: 81d5f8d4b236ce143b1b29aa30206239, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4640596078350459322, guid: 81d5f8d4b236ce143b1b29aa30206239, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6512002159141789737, guid: 81d5f8d4b236ce143b1b29aa30206239, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81d5f8d4b236ce143b1b29aa30206239, type: 3}

@@ -19,7 +19,8 @@ public class NPCController : MonoBehaviour, IBTScanningController
     public AnimationCurve rotationSpeedCurve;
     //public GameObject weaponGO;
 
-
+    public Transform feetTransform;
+    public float feetRotationSmoothTime;
     public float scanningRotationSpeed { get { return CalmRotationSpeed; } }
     
 
@@ -238,6 +239,9 @@ public class NPCController : MonoBehaviour, IBTScanningController
 
     IEnumerator FollowPath(Vector3[] path)
     {
+        if (path.Length == 0)
+            yield return null;
+
         Vector3 currentWaypoint = path[0];
         int targetIndex = 0;
         while (true)
@@ -253,9 +257,17 @@ public class NPCController : MonoBehaviour, IBTScanningController
             }
 
             transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, speed * Time.deltaTime);
+            //RotateFeetToMovementDirection(currentWaypoint-transform.position);
             yield return null;
         }
     }
+
+    //private void RotateFeetToMovementDirection(Vector3 direction)
+    //{
+    //    float rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+    //    float speedModifier = 1f;
+    //    feetTransform.rotation = Quaternion.Lerp(feetTransform.rotation, Quaternion.Euler(0f, 0f, rotation), feetRotationSmoothTime * speedModifier);
+    //}
 
     public void OnDisable()
     {
