@@ -42,7 +42,7 @@ public class PlayerAnimationController : MonoBehaviour
     {
         float speed = _isSprinting ? sprintSpeed : _isMoving ? walkSpeed : 0f;
 
-        animator.SetFloat("AnimationSpeed", speed* _movementDirection.magnitude);
+        animator.SetFloat("Speed", speed* _movementDirection.magnitude);
 
     }
 
