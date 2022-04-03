@@ -229,7 +229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4319ace9d5eb0ca48a46597596004271, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 40
+  health: 20
 --- !u!114 &3747662729021581462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -286,7 +286,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 4258687571884043550}
-  walkSpeed: 2
+  walkSpeedMultiplier: 1.5
+  maximumWalkSpeed: 3
 --- !u!1 &4258687570253644903
 GameObject:
   m_ObjectHideFlags: 0
