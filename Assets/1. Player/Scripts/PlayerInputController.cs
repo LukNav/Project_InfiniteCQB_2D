@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 
@@ -61,7 +62,8 @@ public class PlayerInputController : MonoBehaviour
     }
     public void OnFire(InputAction.CallbackContext context)
     {
-        if (InputActionPhase.Started == context.phase)
+        bool isMouseOverGui = EventSystem.current.IsPointerOverGameObject();
+        if (!isMouseOverGui && InputActionPhase.Started == context.phase)
         {
             input_OnFireDelegate();
         }

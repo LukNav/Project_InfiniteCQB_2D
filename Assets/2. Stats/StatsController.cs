@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cinemachine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,9 @@ public class StatsController : MonoBehaviour// NOTE - player must be in layer of
 
     public delegate void HealthUpdateDelegate();
     public HealthUpdateDelegate healthUpdateDelegate;
+
+    public CinemachineImpulseSource screenShakeImpulseSource;
+    public ParticleSystem bloodSplatterParticleSystem;
 
     public bool isHit { get; private set; }
     public Vector3 hitDirection { get; private set; }
@@ -52,7 +56,14 @@ public class StatsController : MonoBehaviour// NOTE - player must be in layer of
             return;
         }
         if(isPlayer)
+        {
             healthUpdateDelegate();
+            screenShakeImpulseSource.GenerateImpulse();
+        }
+        Debug.DrawRay(transform.position, hitDirection, Color.red, 1f);
+        float bloodSplatterRotationAngleTowardsTarget = Mathf.Atan2(hitDirection.y, hitDirection.x) * Mathf.Rad2Deg - 90f;
+        bloodSplatterParticleSystem.transform.rotation = Quaternion.Euler(0f, 0f, bloodSplatterRotationAngleTowardsTarget);
+        bloodSplatterParticleSystem.Play();
     }
 
     public void Heal(float healAmount)

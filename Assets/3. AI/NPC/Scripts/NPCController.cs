@@ -239,26 +239,26 @@ public class NPCController : MonoBehaviour, IBTScanningController
 
     IEnumerator FollowPath(Vector3[] path)
     {
-        if (path.Length == 0)
-            yield return null;
-
-        Vector3 currentWaypoint = path[0];
-        int targetIndex = 0;
-        while (true)
+        if (path.Length != 0)
         {
-            if (transform.position == currentWaypoint)
+            Vector3 currentWaypoint = path[0];
+            int targetIndex = 0;
+            while (true)
             {
-                targetIndex++;
-                if (targetIndex >= path.Length)
+                if (transform.position == currentWaypoint)
                 {
-                    yield break;
+                    targetIndex++;
+                    if (targetIndex >= path.Length)
+                    {
+                        yield break;
+                    }
+                    currentWaypoint = path[targetIndex];
                 }
-                currentWaypoint = path[targetIndex];
-            }
 
-            transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, speed * Time.deltaTime);
-            //RotateFeetToMovementDirection(currentWaypoint-transform.position);
-            yield return null;
+                transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, speed * Time.deltaTime);
+                //RotateFeetToMovementDirection(currentWaypoint-transform.position);
+                yield return null;
+            }
         }
     }
 

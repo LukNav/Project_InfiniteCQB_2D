@@ -86,7 +86,7 @@ public class PlayerMovementController : MonoBehaviour
     private void RotateFeetToMovementDirection()
     {
         Vector2 direction = _movementDirection;
-        float rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+        float rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg-90f;
         float speedModifier = 1f;
         float rotationSmoothTime = _isSprinting ? sprintRotationSmoothTime : walkRotationSmoothTime;
         feetTransform.rotation = Quaternion.Lerp(feetTransform.rotation, Quaternion.Euler(0f, 0f, rotation), rotationSmoothTime * speedModifier);

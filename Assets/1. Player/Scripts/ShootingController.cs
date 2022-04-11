@@ -1,3 +1,4 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,6 +16,10 @@ public class ShootingController : MonoBehaviour
     public int bulletPoolSize = 15;// maximum count of pooled bullet objects
     private List<GameObject> _bulletPool; // currently instantiated bullets
 
+    [Header("Visual effects - move this later")]
+    public CinemachineImpulseSource cinemachineImpulseSource;
+    public ParticleSystem particleSystem;
+
     [Header("Weapon Settings")]
     //public float rateOfFire = 0.7f; //M1911 pistol Rate of fire is 85 rounds/min, thus 60s/85 = 0.7s delay
     public float bulletSpeed = 10f;
@@ -22,6 +27,7 @@ public class ShootingController : MonoBehaviour
     private float shootTimer;
     private bool isSprinting = false;
     private bool _isWeaponDrawn = false;
+    private bool isPlayer;
 
     void Start()
     {
@@ -33,6 +39,7 @@ public class ShootingController : MonoBehaviour
             _bulletPool.Add(go);
         }
         shootTimer = 0f;
+        isPlayer = LayerMask.NameToLayer("Player") == gameObject.layer;
     }
 
     // Update is called once per frame
@@ -56,6 +63,10 @@ public class ShootingController : MonoBehaviour
             {
                 if (!_bulletPool[i].activeInHierarchy)
                 {
+                    if(isPlayer)
+                        cinemachineImpulseSource.GenerateImpulse();
+                    particleSystem.Play();
+
                     _bulletPool[i].transform.position = firePoint.position;
                     _bulletPool[i].transform.rotation = firePoint.rotation;
                     _bulletPool[i].SetActive(true);
@@ -102,6 +113,8 @@ public class ShootingController : MonoBehaviour
             {
                 if (!_bulletPool[i].activeInHierarchy)
                 {
+                    particleSystem.Play();
+
                     _bulletPool[i].transform.position = firePoint.position;
                     _bulletPool[i].transform.rotation = firePoint.rotation;
                     _bulletPool[i].SetActive(true);

@@ -43,7 +43,6 @@ public class BulletController : MonoBehaviour
      
     public void OnHit(Collider2D other, Vector2 hitPoint)
     {
-        Debug.Log("Bullet HIT");
         StatsController statsController;
         if(other.transform.parent.parent.TryGetComponent<StatsController>(out statsController))
             statsController.TakeDamage(damage, (_originalPos - statsController.transform.position).normalized);
