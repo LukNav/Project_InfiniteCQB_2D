@@ -48,6 +48,12 @@ public class ShootingController : MonoBehaviour
         shootTimer += Time.deltaTime;
     }
 
+    private void FixedUpdate()
+    {
+        if(isPlayer)
+            UIController.OnUpdateFireRateSlider(shootTimer / fireRate);
+    }
+
     public void OnSprint(InputAction.CallbackContext context)
     {
         isSprinting = context.started || context.performed;
@@ -63,8 +69,9 @@ public class ShootingController : MonoBehaviour
             {
                 if (!_bulletPool[i].activeInHierarchy)
                 {
-                    if(isPlayer)
+                    if (isPlayer)
                         cinemachineImpulseSource.GenerateImpulse();
+                    
                     particleSystem.Play();
 
                     _bulletPool[i].transform.position = firePoint.position;

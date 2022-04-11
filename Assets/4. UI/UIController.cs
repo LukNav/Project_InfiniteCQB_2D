@@ -13,6 +13,10 @@ public class UIController : MonoBehaviour
     public GameObject inGameScreen;
     public Slider hpSlider;
     public TMP_Text consumableCounterText;
+    public Slider fireRateSlider;
+
+    public delegate void UpdateFireRateSlider(float value);
+    public static UpdateFireRateSlider OnUpdateFireRateSlider;
 
     private int healthConsumableCounter = 0;
 
@@ -22,6 +26,7 @@ public class UIController : MonoBehaviour
         playerStatsController.deathDelegate += SetActiveDeathScreen;
         playerStatsController.healthUpdateDelegate += UpdateHealthBar;
         Consumable.healthConsumableDelegate += ConsumableCounter_AddOne;
+        OnUpdateFireRateSlider += UpdateFireRateComponent;
     }
 
     private void UpdateHealthBar()
@@ -39,6 +44,13 @@ public class UIController : MonoBehaviour
     {
         healthConsumableCounter++;
         consumableCounterText.text = healthConsumableCounter.ToString();
+    }
+
+
+    /// <param name="value">Slider value [0;1]</param>
+    private void UpdateFireRateComponent(float value)
+    {
+        fireRateSlider.value = value;
     }
 
     public void Restart()
