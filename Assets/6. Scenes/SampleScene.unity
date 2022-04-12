@@ -18241,7 +18241,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ImpulseDefinition:
     m_ImpulseChannel: -1
-    m_ImpulseShape: 2
+    m_ImpulseShape: 1
     m_CustomImpulseShape:
       serializedVersion: 2
       m_Curve:
@@ -18278,27 +18278,63 @@ MonoBehaviour:
     m_ImpulseDuration: 0.1
     m_ImpulseType: 3
     m_DissipationRate: 0.25
-    m_RawSignal: {fileID: 11400000, guid: 72dd9f0578cc6394c929a4a17b5050b7, type: 2}
-    m_AmplitudeGain: 0.5
-    m_FrequencyGain: 0.5
+    m_RawSignal: {fileID: 11400000, guid: 039933a5af790404183efdc7902fc0e9, type: 2}
+    m_AmplitudeGain: 2
+    m_FrequencyGain: 3
     m_RepeatMode: 0
     m_Randomize: 1
     m_TimeEnvelope:
       m_AttackShape:
         serializedVersion: 2
-        m_Curve: []
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
       m_DecayShape:
         serializedVersion: 2
-        m_Curve: []
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: -1.04015
+          outSlope: -1.04015
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: -1.04015
+          outSlope: -1.04015
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
       m_AttackTime: 0
-      m_SustainTime: 0.1
-      m_DecayTime: 0.2
+      m_SustainTime: 0.05
+      m_DecayTime: 0.1
       m_ScaleWithImpact: 1
       m_HoldForever: 0
     m_ImpactRadius: 100
@@ -18708,7 +18744,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8113208, g: 0.8113208, b: 0.8113208, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -19349,7 +19385,7 @@ GameObject:
   - component: {fileID: 1177897769}
   - component: {fileID: 1177897768}
   m_Layer: 5
-  m_Name: ArmorSlider (1)
+  m_Name: FireDelaySlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19402,7 +19438,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0.504
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -21020,7 +21056,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1628948012
 RectTransform:
   m_ObjectHideFlags: 0
@@ -23796,6 +23832,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: f5fd80e8-8a16-494a-9a00-a6615bd69c85
     m_ActionName: Player/DrawWeapon[/Keyboard/v]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1674136602}
+        m_TargetAssemblyTypeName: PlayerInputController, Assembly-CSharp
+        m_MethodName: OnToggleNightVision
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 4959a2ce-ac25-428e-bcdc-a99a55e0383b
+    m_ActionName: Player/ToggleNVG[/Keyboard/n]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -23914,7 +23966,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4319ace9d5eb0ca48a46597596004271, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 10000
+  health: 100
   screenShakeImpulseSource: {fileID: 6124836478309496155}
   bloodSplatterParticleSystem: {fileID: 377925546}
 --- !u!114 &1674136611
@@ -24167,7 +24219,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7774903, y: 1}
+    m_SensorSize: {x: 1.148415, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -24190,7 +24242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ApplyAfter: 2
   m_ChannelMask: -1
-  m_Gain: 0.2
+  m_Gain: -0.07
   m_Use2DDistance: 1
   m_UseCameraSpace: 1
   m_ReactionSettings:
@@ -24345,7 +24397,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IsGlobal: 1
-  priority: 0
+  priority: 0.09
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: 7827bd795876a56489df7f4b4d72577f, type: 2}
@@ -24416,7 +24468,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -25591,7 +25643,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ImpulseDefinition:
     m_ImpulseChannel: -1
-    m_ImpulseShape: 2
+    m_ImpulseShape: 4
     m_CustomImpulseShape:
       serializedVersion: 2
       m_Curve:
@@ -25625,35 +25677,71 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    m_ImpulseDuration: 0.1
+    m_ImpulseDuration: 0.42
     m_ImpulseType: 3
     m_DissipationRate: 0.25
-    m_RawSignal: {fileID: 11400000, guid: dd586d3330ff061439d57c273dcf6f34, type: 2}
-    m_AmplitudeGain: 1
-    m_FrequencyGain: 1
+    m_RawSignal: {fileID: 11400000, guid: 039933a5af790404183efdc7902fc0e9, type: 2}
+    m_AmplitudeGain: 0.13
+    m_FrequencyGain: 1.92
     m_RepeatMode: 0
     m_Randomize: 1
     m_TimeEnvelope:
       m_AttackShape:
         serializedVersion: 2
-        m_Curve: []
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
       m_DecayShape:
         serializedVersion: 2
-        m_Curve: []
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: -1.056775
+          outSlope: -1.056775
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: -1.056775
+          outSlope: -1.056775
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
       m_AttackTime: 0
-      m_SustainTime: 0.1
+      m_SustainTime: 1
       m_DecayTime: 0.2
-      m_ScaleWithImpact: 1
+      m_ScaleWithImpact: 0
       m_HoldForever: 0
     m_ImpactRadius: 100
     m_DirectionMode: 0
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 1, y: 1, z: 0}
+  m_DefaultVelocity: {x: 5, y: 5, z: 0}

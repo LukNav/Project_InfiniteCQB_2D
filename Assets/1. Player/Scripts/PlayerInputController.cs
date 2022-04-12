@@ -29,6 +29,16 @@ public class PlayerInputController : MonoBehaviour
     public delegate void Input_OnFireDelegate();
     public static Input_OnFireDelegate input_OnFireDelegate;
 
+    public delegate void Input_OnToggleNightVisionDelegate();
+    public static Input_OnToggleNightVisionDelegate input_ToggleNightVision;
+
+    private bool _isMouseOverGui;
+
+    public void Update()
+    {
+        _isMouseOverGui = EventSystem.current.currentSelectedGameObject != null;
+    }
+
     public void OnMove(InputAction.CallbackContext context)
     {
         Vector2 movementDirection = context.ReadValue<Vector2>();
@@ -62,10 +72,17 @@ public class PlayerInputController : MonoBehaviour
     }
     public void OnFire(InputAction.CallbackContext context)
     {
-        bool isMouseOverGui = EventSystem.current.IsPointerOverGameObject();
-        if (!isMouseOverGui && InputActionPhase.Started == context.phase)
+        if (!_isMouseOverGui && InputActionPhase.Started == context.phase)
         {
             input_OnFireDelegate();
+        }
+    }
+
+    public void OnToggleNightVision(InputAction.CallbackContext context)
+    {
+        if(InputActionPhase.Started == context.phase)
+        {
+            input_ToggleNightVision();
         }
     }
 

@@ -9,6 +9,11 @@ public class GlobalLightningController : MonoBehaviour
 
     private bool _isToggled { get; set; } = false;
 
+    public void Start()
+    {
+        PlayerInputController.input_ToggleNightVision += ToggleNightVision;
+    }
+
     public void ToggleNightVision()
     {
         _isToggled = !_isToggled;
