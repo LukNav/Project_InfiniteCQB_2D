@@ -11,20 +11,24 @@ public class Consumable : MonoBehaviour
     public delegate void HealthConsumableDelegate(float healAmount);
     public static HealthConsumableDelegate healthConsumableDelegate;
 
+    private bool shouldPlayParticles = true;
     private void Awake()
     {
         _particleSystem = GetComponent<ParticleSystem>();
         if (!_particleSystem)
             Debug.LogError("No Particle system was found");
+
+        UIController.OnParticlesToggle += ToggleParticles;
     }
     public void Trigger(Collider2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
             return;
 
-        _particleSystem.Play();
+        if(shouldPlayParticles)
+            _particleSystem.Play();
         consumableBody.SetActive(false);
-        Invoke("Respawn", 5f);
+        Invoke("Respawn", respawnDelay);
 
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
             healthConsumableDelegate(20f);
@@ -33,5 +37,11 @@ public class Consumable : MonoBehaviour
     private void Respawn()
     {
         consumableBody.SetActive(true);
+    }
+
+    private void ToggleParticles(bool value)
+    {
+        shouldPlayParticles = value;
+        Debug.Log("Particles toggled");
     }
 }
