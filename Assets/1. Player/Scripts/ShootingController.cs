@@ -20,6 +20,9 @@ public class ShootingController : MonoBehaviour
     public CinemachineImpulseSource cinemachineImpulseSource;
     public ParticleSystem particleSystem;
 
+    [Header("Sound effects - move this later")]
+    public AudioSource shootingSound;
+
     [Header("Weapon Settings")]
     //public float rateOfFire = 0.7f; //M1911 pistol Rate of fire is 85 rounds/min, thus 60s/85 = 0.7s delay
     public float bulletSpeed = 10f;
@@ -73,7 +76,7 @@ public class ShootingController : MonoBehaviour
                         cinemachineImpulseSource.GenerateImpulse();
                     
                     particleSystem.Play();
-
+                    shootingSound.Play();
                     _bulletPool[i].transform.position = firePoint.position;
                     _bulletPool[i].transform.rotation = firePoint.rotation;
                     _bulletPool[i].SetActive(true);
@@ -89,8 +92,6 @@ public class ShootingController : MonoBehaviour
                 }
             }
         }
-
-        
     }
 
     public void ShootTowardMouse(int bulletPoolIndex)
@@ -121,7 +122,7 @@ public class ShootingController : MonoBehaviour
                 if (!_bulletPool[i].activeInHierarchy)
                 {
                     particleSystem.Play();
-
+                    shootingSound.Play();
                     _bulletPool[i].transform.position = firePoint.position;
                     _bulletPool[i].transform.rotation = firePoint.rotation;
                     _bulletPool[i].SetActive(true);
